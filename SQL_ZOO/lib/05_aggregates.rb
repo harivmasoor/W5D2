@@ -63,7 +63,7 @@ def group_population
   FROM
     countries
   WHERE
-    name IN ('France','Germany', 'Spain')
+    name IN ('France','Germany', 'Spain');
   SQL
 end
 
@@ -71,11 +71,9 @@ def country_counts
   # For each continent show the continent and number of countries.
   execute(<<-SQL)
 SELECT 
-  sum(population)
+  continent, COUNT(*)
 FROM
-  countries
-WHERE
-  name IN ('France','Germany', 'Spain')
+  countries GROUP BY continent;
   SQL
 end
 
@@ -88,12 +86,18 @@ SELECT
 FROM
   countries
 WHERE
-  population >= 10000000 GROUP BY continent
+  population >= 10000000 GROUP BY continent;
   SQL
 end
 
 def populous_continents
   # List the continents that have a total population of at least 100 million.
   execute(<<-SQL)
+  SELECT 
+    continent 
+  FROM 
+    countries GROUP BY continent
+  HAVING
+    sum(population) > 100000000
   SQL
 end
